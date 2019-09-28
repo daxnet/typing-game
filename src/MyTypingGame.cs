@@ -19,6 +19,7 @@ namespace TypingGame
                 IsFullScreen = false
             })
         {
+            Add<PrefaceScene>();
             Add<GameScene>();
         }
     }

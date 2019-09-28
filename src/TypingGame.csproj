@@ -46,6 +46,7 @@
     <Compile Include="LaserSprite.cs" />
     <Compile Include="LetterSprite.cs" />
     <Compile Include="MyTypingGame.cs" />
+    <Compile Include="PrefaceScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

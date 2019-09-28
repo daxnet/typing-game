@@ -125,7 +125,7 @@ namespace TypingGame
             scoreText = new Text(string.Format("Score: {0}", this.score),
                 this,
                 scoreTextFont,
-                Color.YellowGreen,
+                Color.White,
                 new Vector2(ViewportWidth - 150, 3))
             { CollisionDetective = false };
             this.Add(scoreText);
@@ -279,7 +279,7 @@ namespace TypingGame
                 var letterSpriteY = letterSprite.Y;
                 explodeSound.Play();
                 score++;
-                level = score / 10;
+                level = score / 50;
                 if (level > 19)
                 {
                     level = 19;

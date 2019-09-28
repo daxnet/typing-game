@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypingGame", "TypingGame.csproj", "{C573E54E-E4DD-40FC-9EB6-F3E4DA1B804E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ovow", "Ovow", "{8B083C83-E127-4F83-9BCC-72E569804C1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ovow.Framework", "..\ovow\src\Ovow.Framework\Ovow.Framework.csproj", "{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C573E54E-E4DD-40FC-9EB6-F3E4DA1B804E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C573E54E-E4DD-40FC-9EB6-F3E4DA1B804E}.Debug|x86.ActiveCfg = Debug|x86
+		{C573E54E-E4DD-40FC-9EB6-F3E4DA1B804E}.Debug|x86.Build.0 = Debug|x86
+		{C573E54E-E4DD-40FC-9EB6-F3E4DA1B804E}.Release|Any CPU.ActiveCfg = Release|x86
+		{C573E54E-E4DD-40FC-9EB6-F3E4DA1B804E}.Release|x86.ActiveCfg = Release|x86
+		{C573E54E-E4DD-40FC-9EB6-F3E4DA1B804E}.Release|x86.Build.0 = Release|x86
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Debug|x86.Build.0 = Debug|Any CPU
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Release|x86.ActiveCfg = Release|Any CPU
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{43D640ED-B974-4612-AADC-4CCCC1EE7BEF} = {8B083C83-E127-4F83-9BCC-72E569804C1A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9FCEB780-137A-4915-903E-5E124CCC7200}
+	EndGlobalSection
+EndGlobal

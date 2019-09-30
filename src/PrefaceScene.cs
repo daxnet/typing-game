@@ -70,5 +70,15 @@ namespace TypingGame
                 Game.Exit();
             }
         }
+
+        public override void Enter()
+        {
+            base.Enter();
+        }
+
+        public override void Leave()
+        {
+            base.Leave();
+        }
     }
 }

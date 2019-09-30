@@ -39,7 +39,7 @@ namespace TypingGame
         private Texture2D grassTexture;
         private Texture2D laserTexture;
         private TimeSpan letterGenerationTimeSpan = TimeSpan.Zero;
-        private TimeSpan letterGenerationTimeSpanThreshold = TimeSpan.FromMilliseconds(1000);
+        private TimeSpan letterGenerationTimeSpanThreshold = TimeSpan.FromMilliseconds(1200);
         private int level = 0;
         private int score = 0;
         private Text scoreText;
@@ -118,7 +118,7 @@ namespace TypingGame
 
             // Loads font textures.
             diagTextFont = contentManager.Load<SpriteFont>("diagText");
-            diagText = new Text(string.Format(DiagTextPattern, this.Count), this, diagTextFont) { CollisionDetective = false };
+            diagText = new Text(string.Format(DiagTextPattern, this.Count), this, diagTextFont, Color.LightBlue) { CollisionDetective = false };
             this.Add(diagText);
 
             scoreTextFont = contentManager.Load<SpriteFont>("score");
@@ -142,11 +142,21 @@ namespace TypingGame
             }
 
             bgm = new BackgroundMusic(bgmMusicEffects, 0.2F);
-            bgm.Play();
+            
             Add(bgm);
 
             // Add game services.
             this.Add(new CollisionDetectionService(this));
+        }
+
+        public override void Enter()
+        {
+            bgm.Play();
+        }
+
+        public override void Leave()
+        {
+            base.Leave();
         }
 
         public override void Update(GameTime gameTime)
@@ -157,7 +167,8 @@ namespace TypingGame
             }
 
             this.letterGenerationTimeSpan += gameTime.ElapsedGameTime;
-            if (this.letterGenerationTimeSpan >= letterGenerationTimeSpanThreshold)
+            if (this.letterGenerationTimeSpan >= letterGenerationTimeSpanThreshold &&
+                LetterSprites.Count() < 26)
             {
                 var letterIndex = rnd.Next(0, 26);
                 var letter = (char)('A' + letterIndex);

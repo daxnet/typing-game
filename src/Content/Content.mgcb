@@ -337,6 +337,12 @@
 /processorParam:Quality=Best
 /build:bgm2.mp3
 
+#begin bgm3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bgm3.mp3
+
 #begin cloud.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -355,6 +361,12 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:diagText.spritefont
+
+#begin ending.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:ending.mp3
 
 #begin explode.mp3
 /importer:Mp3Importer

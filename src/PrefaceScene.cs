@@ -26,6 +26,7 @@ namespace TypingGame
             : base(game)
         {
             Out = new DelayTransition(this, TimeSpan.FromMilliseconds(100));
+            NextSceneName = "main";
         }
 
         public override void Load(ContentManager contentManager)

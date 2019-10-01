@@ -16,12 +16,12 @@ using System.Linq;
 
 namespace TypingGame
 {
-    internal sealed class GameScene : Scene
+    internal sealed class MainScene : Scene
     {
 
         #region Private Fields
 
-        private const string DiagTextPattern = @"[TOTAL OBJECTS] {0}";
+        private const string DiagTextPattern = @"[TOTAL OBJECTS1] {0}";
         private static readonly Random rnd = new Random(DateTime.Now.Millisecond);
         private readonly List<SoundEffect> bgmMusicEffects = new List<SoundEffect>();
         private readonly Dictionary<char, Texture2D> lettersTextureDict = new Dictionary<char, Texture2D>();
@@ -51,7 +51,7 @@ namespace TypingGame
 
         #region Public Constructors
 
-        public GameScene(IOvowGame game) : base(game)
+        public MainScene(IOvowGame game) : base(game)
         {
             AutoRemoveInactiveComponents = true;
 
@@ -136,7 +136,7 @@ namespace TypingGame
             this.Add(explodeSound);
 
             // Loads the BGM.
-            for (var idx = 1; idx <= 2; idx++)
+            for (var idx = 1; idx <= 3; idx++)
             {
                 bgmMusicEffects.Add(contentManager.Load<SoundEffect>($"bgm{idx}"));
             }
@@ -156,7 +156,7 @@ namespace TypingGame
 
         public override void Leave()
         {
-            base.Leave();
+            bgm.Stop();
         }
 
         public override void Update(GameTime gameTime)

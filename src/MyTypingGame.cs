@@ -19,8 +19,8 @@ namespace TypingGame
                 IsFullScreen = false
             })
         {
-            Add<PrefaceScene>();
-            Add<GameScene>();
+            AddScene<PrefaceScene>("preface", true);
+            AddScene<MainScene>("main");
         }
     }
 }

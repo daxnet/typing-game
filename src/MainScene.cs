@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Ovow.Framework;
-using Ovow.Framework.Messaging.GeneralMessages;
+using Ovow.Framework.Messaging;
 using Ovow.Framework.Scenes;
 using Ovow.Framework.Services;
 using Ovow.Framework.Sounds;

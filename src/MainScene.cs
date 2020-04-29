@@ -21,7 +21,8 @@ namespace TypingGame
 
         #region Private Fields
 
-        private const string DiagTextPattern = @"[TOTAL OBJECTS1] {0}";
+        private const string DiagTextPattern = @"【调试：总对象数量】 {0}";
+        private const string CurrentScoreTextPattern = @"目前得分：{0} 分";
         private static readonly Random rnd = new Random(DateTime.Now.Millisecond);
         private readonly List<SoundEffect> bgmMusicEffects = new List<SoundEffect>();
         private readonly Dictionary<char, Texture2D> lettersTextureDict = new Dictionary<char, Texture2D>();
@@ -122,11 +123,11 @@ namespace TypingGame
             this.Add(diagText);
 
             scoreTextFont = contentManager.Load<SpriteFont>("score");
-            scoreText = new Text(string.Format("Score: {0}", this.score),
+            scoreText = new Text(string.Format(CurrentScoreTextPattern, this.score),
                 this,
                 scoreTextFont,
                 Color.White,
-                new Vector2(ViewportWidth - 150, 3))
+                new Vector2(ViewportWidth - 200, 3))
             { CollisionDetective = false };
             this.Add(scoreText);
 
@@ -296,7 +297,7 @@ namespace TypingGame
                     level = 19;
                 }
 
-                scoreText.Value = $"Score: {score}";
+                scoreText.Value = string.Format(CurrentScoreTextPattern, score);
 
                 letterSprite.IsActive = false;
                 laserSprite.IsActive = false;

@@ -11,13 +11,13 @@ with.
     <!--
     Modify this string to change the font that will be imported.
     -->
-    <FontName>Arial</FontName>
+    <FontName>Microsoft YaHei</FontName>
 
     <!--
     Size is a float value, measured in points. Modify this value to change
     the size of the font.
     -->
-    <Size>12</Size>
+    <Size>14</Size>
 
     <!--
     Spacing is a float value, measured in pixels. Modify this value to change
@@ -55,6 +55,48 @@ with.
         <Start>&#32;</Start>
         <End>&#126;</End>
       </CharacterRegion>
+      <CharacterRegion>
+<Start>&#12304;</Start>
+<End>&#12304;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#35843;</Start>
+<End>&#35843;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#35797;</Start>
+<End>&#35797;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#65306;</Start>
+<End>&#65306;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#24635;</Start>
+<End>&#24635;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#23545;</Start>
+<End>&#23545;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#35937;</Start>
+<End>&#35937;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#25968;</Start>
+<End>&#25968;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#37327;</Start>
+<End>&#37327;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#12305;</Start>
+<End>&#12305;</End>
+</CharacterRegion>
+
+
     </CharacterRegions>
   </Asset>
 </XnaContent>

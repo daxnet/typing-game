@@ -16,8 +16,8 @@ namespace TypingGame
 {
     internal sealed class PrefaceScene : Scene
     {
-        const string BeginGameHint = "Press [SPACE] key to begin";
-        const string CopyrightHint = "(C) Copyright 2019 by daxnet. Program by Qingyang Chen.";
+        const string BeginGameHint = "请按【空格】键开始游戏";
+        const string CopyrightHint = "作者：凉城三小四（二）班 陈知涵";
         private Texture2D logoTexture;
         private SpriteFont font;
         private bool disposed;

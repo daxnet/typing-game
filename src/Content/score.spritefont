@@ -11,7 +11,7 @@ with.
     <!--
     Modify this string to change the font that will be imported.
     -->
-    <FontName>Comic Sans MS</FontName>
+    <FontName>Microsoft YaHei</FontName>
 
     <!--
     Size is a float value, measured in points. Modify this value to change
@@ -55,6 +55,27 @@ with.
         <Start>&#32;</Start>
         <End>&#126;</End>
       </CharacterRegion>
+      <CharacterRegion>
+<Start>&#30446;</Start>
+<End>&#30446;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#21069;</Start>
+<End>&#21069;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#24471;</Start>
+<End>&#24471;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#20998;</Start>
+<End>&#20998;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#65306;</Start>
+<End>&#65306;</End>
+</CharacterRegion>
+
     </CharacterRegions>
   </Asset>
 </XnaContent>

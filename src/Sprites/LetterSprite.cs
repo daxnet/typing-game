@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TypingGame
+namespace TypingGame.Sprites
 {
     internal sealed class LetterSprite : Sprite
     {

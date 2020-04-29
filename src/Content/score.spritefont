@@ -75,6 +75,22 @@ with.
 <Start>&#65306;</Start>
 <End>&#65306;</End>
 </CharacterRegion>
+<CharacterRegion>
+<Start>&#24403;</Start>
+<End>&#24403;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#21069;</Start>
+<End>&#21069;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#32423;</Start>
+<End>&#32423;</End>
+</CharacterRegion>
+<CharacterRegion>
+<Start>&#21035;</Start>
+<End>&#21035;</End>
+</CharacterRegion>
 
     </CharacterRegions>
   </Asset>

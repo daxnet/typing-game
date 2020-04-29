@@ -42,11 +42,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="MainScene.cs" />
-    <Compile Include="LaserSprite.cs" />
-    <Compile Include="LetterSprite.cs" />
+    <Compile Include="Scenes\EndScene.cs" />
+    <Compile Include="Scenes\MainScene.cs" />
+    <Compile Include="Sprites\LaserSprite.cs" />
+    <Compile Include="Sprites\LetterSprite.cs" />
     <Compile Include="MyTypingGame.cs" />
-    <Compile Include="PrefaceScene.cs" />
+    <Compile Include="Scenes\PrefaceScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

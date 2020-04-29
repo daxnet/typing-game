@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TypingGame
+namespace TypingGame.Sprites
 {
     /// <summary>
     /// Represents the laser sprite.

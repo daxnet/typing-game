@@ -13,16 +13,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using TypingGame.Sprites;
 
-namespace TypingGame
+namespace TypingGame.Scenes
 {
     internal sealed class MainScene : Scene
     {
-
         #region Private Fields
 
+        private const string CurrentLevelTextPattern = @"当前级别：{0}级";
+        private const string CurrentScoreTextPattern = @"当前得分：{0} 分";
         private const string DiagTextPattern = @"【调试：总对象数量】 {0}";
-        private const string CurrentScoreTextPattern = @"目前得分：{0} 分";
         private static readonly Random rnd = new Random(DateTime.Now.Millisecond);
         private readonly List<SoundEffect> bgmMusicEffects = new List<SoundEffect>();
         private readonly Dictionary<char, Texture2D> lettersTextureDict = new Dictionary<char, Texture2D>();
@@ -40,13 +42,16 @@ namespace TypingGame
         private Texture2D grassTexture;
         private Texture2D laserTexture;
         private TimeSpan letterGenerationTimeSpan = TimeSpan.Zero;
-        private TimeSpan letterGenerationTimeSpanThreshold = TimeSpan.FromMilliseconds(1200);
+        private TimeSpan letterGenerationTimeSpanThreshold = TimeSpan.FromMilliseconds(1500);
         private int level = 0;
+        private Text levelText;
         private int score = 0;
+        private SpriteFont scoreLevelTextFont;
         private Text scoreText;
-        private SpriteFont scoreTextFont;
         private Texture2D sunTexture;
         private Texture2D treeTexture;
+
+        private bool showDiagText;
 
         #endregion Private Fields
 
@@ -64,21 +69,31 @@ namespace TypingGame
             Subscribe<ReachBoundaryMessage>(HandleReachBoundaryMessage);
             Subscribe<CollisionDetectedMessage>(HandleCollisionDetectedMessage);
             Subscribe<AnimationCompletedMessage>(HandleAnimationCompletedMessage);
+
+            NextSceneName = "end";
         }
 
         #endregion Public Constructors
 
         #region Private Properties
 
-        private IEnumerable<LaserSprite> LaserSprites =>
-            from p in this where p is LaserSprite select p as LaserSprite;
+        private IEnumerable<LaserSprite> LaserSprites => from p in this where p is LaserSprite select p as LaserSprite;
 
-        private IEnumerable<LetterSprite> LetterSprites =>
-            from p in this where p is LetterSprite select p as LetterSprite;
+        private IEnumerable<LetterSprite> LetterSprites => from p in this where p is LetterSprite select p as LetterSprite;
 
         #endregion Private Properties
 
         #region Public Methods
+
+        public override void Enter()
+        {
+            bgm.Play();
+        }
+
+        public override void Leave()
+        {
+            bgm.Stop();
+        }
 
         public override void Load(ContentManager contentManager)
         {
@@ -122,14 +137,22 @@ namespace TypingGame
             diagText = new Text(string.Format(DiagTextPattern, this.Count), this, diagTextFont, Color.LightBlue) { CollisionDetective = false };
             this.Add(diagText);
 
-            scoreTextFont = contentManager.Load<SpriteFont>("score");
+            scoreLevelTextFont = contentManager.Load<SpriteFont>("score");
             scoreText = new Text(string.Format(CurrentScoreTextPattern, this.score),
                 this,
-                scoreTextFont,
+                scoreLevelTextFont,
                 Color.White,
                 new Vector2(ViewportWidth - 200, 3))
             { CollisionDetective = false };
             this.Add(scoreText);
+
+            levelText = new Text(string.Format(CurrentLevelTextPattern, this.level + 1),
+                this,
+                scoreLevelTextFont,
+                Color.White,
+                new Vector2(ViewportWidth - 200, scoreText.Y + scoreText.TextHeight))
+            { CollisionDetective = false };
+            this.Add(levelText);
 
             // Loads the Hit Sound.
             explodeSoundEffect = contentManager.Load<SoundEffect>("explode");
@@ -143,28 +166,24 @@ namespace TypingGame
             }
 
             bgm = new BackgroundMusic(bgmMusicEffects, 0.2F);
-            
+
             Add(bgm);
 
             // Add game services.
             this.Add(new CollisionDetectionService(this));
         }
 
-        public override void Enter()
-        {
-            bgm.Play();
-        }
-
-        public override void Leave()
-        {
-            bgm.Stop();
-        }
-
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 End();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                showDiagText = !showDiagText;
             }
 
             this.letterGenerationTimeSpan += gameTime.ElapsedGameTime;
@@ -204,14 +223,22 @@ namespace TypingGame
             // Checks key press
             var pressedKeys = Keyboard.GetState().GetPressedKeys();
             LetterSprite hitLetter = null;
-            foreach (var ls in LetterSprites)
+            Parallel.ForEach(LetterSprites, (ls, state) =>
             {
                 if (pressedKeys.Any(pk => (int)pk == ls.Letter))
                 {
                     hitLetter = ls;
-                    break;
+                    state.Break();
                 }
-            }
+            });
+            //foreach (var ls in LetterSprites)
+            //{
+            //    if (pressedKeys.Any(pk => (int)pk == ls.Letter))
+            //    {
+            //        hitLetter = ls;
+            //        break;
+            //    }
+            //}
 
             if (hitLetter != null &&
                 !LaserSprites.Any(l => l.Letter == hitLetter.Letter))
@@ -226,8 +253,8 @@ namespace TypingGame
             }
 
             // Updates the diagnostic information text.
+            diagText.Visible = showDiagText;
             diagText.Value = string.Format(DiagTextPattern, this.Count);
-            base.Update(gameTime);
         }
 
         #endregion Public Methods
@@ -251,7 +278,7 @@ namespace TypingGame
                     sunTexture.Dispose();
                     grassTexture.Dispose();
                     diagTextFont.Texture.Dispose();
-                    scoreTextFont.Texture.Dispose();
+                    scoreLevelTextFont.Texture.Dispose();
                     explodeSound.Stop();
                     explodeSoundEffect.Dispose();
                     bgm.Stop();
@@ -298,6 +325,7 @@ namespace TypingGame
                 }
 
                 scoreText.Value = string.Format(CurrentScoreTextPattern, score);
+                levelText.Value = string.Format(CurrentLevelTextPattern, level + 1);
 
                 letterSprite.IsActive = false;
                 laserSprite.IsActive = false;

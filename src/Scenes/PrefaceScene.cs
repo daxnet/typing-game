@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TypingGame
+namespace TypingGame.Scenes
 {
     internal sealed class PrefaceScene : Scene
     {

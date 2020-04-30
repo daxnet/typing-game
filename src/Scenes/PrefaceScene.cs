@@ -3,24 +3,22 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Ovow.Framework;
+using Ovow.Framework.Components;
 using Ovow.Framework.Scenes;
 using Ovow.Framework.Sprites;
 using Ovow.Framework.Transitions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TypingGame.Scenes
 {
     internal sealed class PrefaceScene : Scene
     {
-        const string BeginGameHint = "请按【空格】键开始游戏";
-        const string CopyrightHint = "作者：凉城三小四（二）班 陈知涵";
+        private const string BeginGameHint = "请按【空格】键开始游戏";
+        private const string CopyrightHint = "作者：凉城三小四（二）班 陈知涵";
         private Texture2D logoTexture;
         private SpriteFont font;
         private bool disposed;
+        //private ProgressBar pg;
 
         public PrefaceScene(IOvowGame game)
             : base(game)
@@ -42,6 +40,20 @@ namespace TypingGame.Scenes
             Add(new Text(CopyrightHint, this, font, Color.Blue,
                 new Vector2((ViewportWidth - copyrightTextSize.X) / 2, ViewportHeight - copyrightTextSize.Y - 5))
             { CollisionDetective = false });
+
+            //pg = new ProgressBar(this, new Rectangle((ViewportWidth - 450) / 2, 15, 450, 40))
+            //{
+            //    Minimum = 0,
+            //    Maximum = 1000,
+            //    BorderColorInner = Color.Red,
+            //    BorderColorOuter = Color.DarkRed,
+            //    FillColor = Color.MediumVioletRed,
+            //    BackgroundColor = Color.TransparentBlack
+            //};
+
+            //pg.Value = pg.Maximum;
+
+            //Add(pg);
         }
 
         protected override void Dispose(bool disposing)
@@ -62,6 +74,14 @@ namespace TypingGame.Scenes
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            //if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            //{
+            //    pg.Value -= 10;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            //{
+            //    pg.Value += 10;
+            //}
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 End();
@@ -70,16 +90,6 @@ namespace TypingGame.Scenes
             {
                 Game.Exit();
             }
-        }
-
-        public override void Enter()
-        {
-            base.Enter();
-        }
-
-        public override void Leave()
-        {
-            base.Leave();
         }
     }
 }

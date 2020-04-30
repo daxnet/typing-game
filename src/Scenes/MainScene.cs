@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Ovow.Framework;
+using Ovow.Framework.Components;
 using Ovow.Framework.Messaging;
 using Ovow.Framework.Scenes;
 using Ovow.Framework.Services;
@@ -22,7 +23,7 @@ namespace TypingGame.Scenes
     {
         #region Private Fields
 
-        private const string CurrentLevelTextPattern = @"当前级别：{0}级";
+        private const string CurrentLevelTextPattern = @"当前级别：{0} 级";
         private const string CurrentScoreTextPattern = @"当前得分：{0} 分";
         private const string DiagTextPattern = @"【调试：总对象数量】 {0}";
         private static readonly Random rnd = new Random(DateTime.Now.Millisecond);

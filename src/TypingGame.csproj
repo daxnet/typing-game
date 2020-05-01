@@ -42,8 +42,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Scenes\EndScene.cs" />
+    <Compile Include="Scenes\GameOverScene.cs" />
     <Compile Include="Scenes\MainScene.cs" />
+    <Compile Include="Scenes\SceneBase.cs" />
     <Compile Include="Sprites\LaserSprite.cs" />
     <Compile Include="Sprites\LetterSprite.cs" />
     <Compile Include="MyTypingGame.cs" />

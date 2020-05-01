@@ -23,7 +23,7 @@ namespace TypingGame
         {
             AddScene<PrefaceScene>("preface", true);
             AddScene<MainScene>("main");
-            AddScene<EndScene>("end");
+            AddScene<GameOverScene>("gameOver");
         }
     }
 }

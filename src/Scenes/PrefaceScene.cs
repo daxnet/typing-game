@@ -11,14 +11,13 @@ using System;
 
 namespace TypingGame.Scenes
 {
-    internal sealed class PrefaceScene : Scene
+    internal sealed class PrefaceScene : SceneBase
     {
         private const string BeginGameHint = "请按【空格】键开始游戏";
         private const string CopyrightHint = "作者：凉城三小四（二）班 陈知涵";
         private Texture2D logoTexture;
         private SpriteFont font;
         private bool disposed;
-        //private ProgressBar pg;
 
         public PrefaceScene(IOvowGame game)
             : base(game)
@@ -29,31 +28,17 @@ namespace TypingGame.Scenes
 
         public override void Load(ContentManager contentManager)
         {
+            base.Load(contentManager);
+
             logoTexture = contentManager.Load<Texture2D>("logo");
             Add(new DumbSprite(this, logoTexture, new Vector2((ViewportWidth - logoTexture.Width) / 2, (ViewportHeight - logoTexture.Height) / 2 - 150)));
             font = contentManager.Load<SpriteFont>("font");
             var beginGameTextSize = font.MeasureString(BeginGameHint);
             Add(new Text(BeginGameHint, this, font, Color.Yellow,
-                new Vector2((ViewportWidth - beginGameTextSize.X) / 2, (ViewportHeight - beginGameTextSize.Y) / 2))
-            { CollisionDetective = false });
+                new Vector2((ViewportWidth - beginGameTextSize.X) / 2, (ViewportHeight - beginGameTextSize.Y) / 2)));
             var copyrightTextSize = font.MeasureString(CopyrightHint);
-            Add(new Text(CopyrightHint, this, font, Color.Blue,
-                new Vector2((ViewportWidth - copyrightTextSize.X) / 2, ViewportHeight - copyrightTextSize.Y - 5))
-            { CollisionDetective = false });
-
-            //pg = new ProgressBar(this, new Rectangle((ViewportWidth - 450) / 2, 15, 450, 40))
-            //{
-            //    Minimum = 0,
-            //    Maximum = 1000,
-            //    BorderColorInner = Color.Red,
-            //    BorderColorOuter = Color.DarkRed,
-            //    FillColor = Color.MediumVioletRed,
-            //    BackgroundColor = Color.TransparentBlack
-            //};
-
-            //pg.Value = pg.Maximum;
-
-            //Add(pg);
+            Add(new Text(CopyrightHint, this, font, Color.White,
+                new Vector2((ViewportWidth - copyrightTextSize.X) / 2, ViewportHeight - copyrightTextSize.Y - 15)));
         }
 
         protected override void Dispose(bool disposing)
@@ -74,14 +59,7 @@ namespace TypingGame.Scenes
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            //if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            //{
-            //    pg.Value -= 10;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            //{
-            //    pg.Value += 10;
-            //}
+
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 End();

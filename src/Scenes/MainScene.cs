@@ -14,25 +14,28 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using TypingGame.Sprites;
 
 namespace TypingGame.Scenes
 {
-    internal sealed class MainScene : Scene
+    internal sealed class MainScene : SceneBase
     {
         #region Private Fields
 
         private const string CurrentLevelTextPattern = @"当前级别：{0} 级";
         private const string CurrentScoreTextPattern = @"当前得分：{0} 分";
         private const string DiagTextPattern = @"【调试：总对象数量】 {0}";
+        private const int LetterGenerationInterval = 1500;
+        private const string LifeText = @"生命值：";
+        private const int ScorePerLevel = 25;
+        private const float TotalLifes = 10;
+
         private static readonly Random rnd = new Random(DateTime.Now.Millisecond);
         private readonly List<SoundEffect> bgmMusicEffects = new List<SoundEffect>();
         private readonly Dictionary<char, Texture2D> lettersTextureDict = new Dictionary<char, Texture2D>();
         private readonly List<(float, float)> levelSpeeds = new List<(float, float)>();
 
         private BackgroundMusic bgm;
-        private Texture2D cloudTexture;
         private Text diagText;
         private SpriteFont diagTextFont;
         private bool disposed;
@@ -40,18 +43,17 @@ namespace TypingGame.Scenes
         private SoundEffect explodeSoundEffect;
         private AnimatedSpriteDefinition explosionDefinition;
         private Texture2D explosionTexture;
-        private Texture2D grassTexture;
         private Texture2D laserTexture;
         private TimeSpan letterGenerationTimeSpan = TimeSpan.Zero;
-        private TimeSpan letterGenerationTimeSpanThreshold = TimeSpan.FromMilliseconds(1500);
+        private TimeSpan letterGenerationTimeSpanThreshold = TimeSpan.FromMilliseconds(LetterGenerationInterval);
         private int level = 0;
         private Text levelText;
+        private float life;
+        private ProgressBar lifeProgressBar;
+        private Text lifeText;
         private int score = 0;
         private SpriteFont scoreLevelTextFont;
         private Text scoreText;
-        private Texture2D sunTexture;
-        private Texture2D treeTexture;
-
         private bool showDiagText;
 
         #endregion Private Fields
@@ -64,14 +66,12 @@ namespace TypingGame.Scenes
 
             for (var i = 0; i < 20; i++)
             {
-                levelSpeeds.Add(((i + 1) * 0.3F, (i + 2) * 0.3F));
+                levelSpeeds.Add(((i + 1) * 0.8F, (i + 2) * 0.8F));
             }
 
             Subscribe<ReachBoundaryMessage>(HandleReachBoundaryMessage);
             Subscribe<CollisionDetectedMessage>(HandleCollisionDetectedMessage);
             Subscribe<AnimationCompletedMessage>(HandleAnimationCompletedMessage);
-
-            NextSceneName = "end";
         }
 
         #endregion Public Constructors
@@ -98,28 +98,14 @@ namespace TypingGame.Scenes
 
         public override void Load(ContentManager contentManager)
         {
+            base.Load(contentManager);
+
+            life = TotalLifes;
+
             using (var fs = new FileStream("explosion.xml", FileMode.Open, FileAccess.Read))
             {
                 explosionDefinition = AnimatedSpriteDefinition.Load(fs);
             }
-
-            // Loads texture for background elements.
-            sunTexture = contentManager.Load<Texture2D>("sun");
-            cloudTexture = contentManager.Load<Texture2D>("cloud");
-            treeTexture = contentManager.Load<Texture2D>("tree");
-            grassTexture = contentManager.Load<Texture2D>("grass");
-
-            var sunSprite = new DumbSprite(this, sunTexture, new Vector2(10, 10));
-            Add(sunSprite);
-
-            var cloudSprite = new DumbSprite(this, cloudTexture, new Vector2(ViewportWidth - cloudTexture.Width - 50, 50));
-            Add(cloudSprite);
-
-            var grassSprite = new DumbSprite(this, grassTexture, new Vector2(0, ViewportHeight - grassTexture.Height));
-            Add(grassSprite);
-
-            var treeSprite = new DumbSprite(this, treeTexture, new Vector2(ViewportWidth - treeTexture.Width - 30, ViewportHeight - treeTexture.Height - 100));
-            Add(treeSprite);
 
             // Loads texture for letters.
             for (char i = 'A'; i <= 'Z'; i++)
@@ -143,17 +129,29 @@ namespace TypingGame.Scenes
                 this,
                 scoreLevelTextFont,
                 Color.White,
-                new Vector2(ViewportWidth - 200, 3))
-            { CollisionDetective = false };
+                new Vector2(ViewportWidth - 200, 3));
             this.Add(scoreText);
 
             levelText = new Text(string.Format(CurrentLevelTextPattern, this.level + 1),
                 this,
                 scoreLevelTextFont,
                 Color.White,
-                new Vector2(ViewportWidth - 200, scoreText.Y + scoreText.TextHeight))
-            { CollisionDetective = false };
+                new Vector2(ViewportWidth - 200, scoreText.Y + scoreText.TextHeight));
             this.Add(levelText);
+
+            lifeProgressBar = new ProgressBar(this, (ViewportWidth - 210) / 2, 7, 210, 25, ProgressBar.Orientation.HorizontalLeftToRight)
+            {
+                Minimum = 0,
+                Maximum = TotalLifes,
+                FillColor = Color.OrangeRed,
+                BackgroundColor = Color.CornflowerBlue
+            };
+
+            lifeProgressBar.Value = life;
+            Add(lifeProgressBar);
+
+            lifeText = new Text(LifeText, this, scoreLevelTextFont, Color.White, new Vector2(lifeProgressBar.Position.X - 80, 5));
+            Add(lifeText);
 
             // Loads the Hit Sound.
             explodeSoundEffect = contentManager.Load<SoundEffect>("explode");
@@ -161,7 +159,7 @@ namespace TypingGame.Scenes
             this.Add(explodeSound);
 
             // Loads the BGM.
-            for (var idx = 1; idx <= 3; idx++)
+            for (var idx = 1; idx <= 2; idx++)
             {
                 bgmMusicEffects.Add(contentManager.Load<SoundEffect>($"bgm{idx}"));
             }
@@ -177,10 +175,6 @@ namespace TypingGame.Scenes
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                End();
-            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
@@ -224,22 +218,15 @@ namespace TypingGame.Scenes
             // Checks key press
             var pressedKeys = Keyboard.GetState().GetPressedKeys();
             LetterSprite hitLetter = null;
-            Parallel.ForEach(LetterSprites, (ls, state) =>
+
+            foreach (var ls in LetterSprites)
             {
                 if (pressedKeys.Any(pk => (int)pk == ls.Letter))
                 {
                     hitLetter = ls;
-                    state.Break();
+                    break;
                 }
-            });
-            //foreach (var ls in LetterSprites)
-            //{
-            //    if (pressedKeys.Any(pk => (int)pk == ls.Letter))
-            //    {
-            //        hitLetter = ls;
-            //        break;
-            //    }
-            //}
+            }
 
             if (hitLetter != null &&
                 !LaserSprites.Any(l => l.Letter == hitLetter.Letter))
@@ -256,6 +243,7 @@ namespace TypingGame.Scenes
             // Updates the diagnostic information text.
             diagText.Visible = showDiagText;
             diagText.Value = string.Format(DiagTextPattern, this.Count);
+
         }
 
         #endregion Public Methods
@@ -274,10 +262,6 @@ namespace TypingGame.Scenes
                     }
 
                     laserTexture.Dispose();
-                    treeTexture.Dispose();
-                    cloudTexture.Dispose();
-                    sunTexture.Dispose();
-                    grassTexture.Dispose();
                     diagTextFont.Texture.Dispose();
                     scoreLevelTextFont.Texture.Dispose();
                     explodeSound.Stop();
@@ -319,11 +303,18 @@ namespace TypingGame.Scenes
                 var letterSpriteY = letterSprite.Y;
                 explodeSound.Play();
                 score++;
-                level = score / 50;
+                level = score / ScorePerLevel;
                 if (level > 19)
                 {
                     level = 19;
                 }
+
+                if (life < TotalLifes)
+                {
+                    life += 0.2f;
+                }
+
+                lifeProgressBar.Value = life;
 
                 scoreText.Value = string.Format(CurrentScoreTextPattern, score);
                 levelText.Value = string.Format(CurrentLevelTextPattern, level + 1);
@@ -350,6 +341,12 @@ namespace TypingGame.Scenes
                     message.ReachedBoundary == Boundary.Bottom)
             {
                 letterSprite.IsActive = false;
+                life--;
+                lifeProgressBar.Value = life;
+                if (life <= 0)
+                {
+                    EndTo("gameOver");
+                }
             }
 
             if (sender is LaserSprite laserSprite &&

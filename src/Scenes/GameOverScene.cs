@@ -5,30 +5,33 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Ovow.Framework;
 using Ovow.Framework.Components;
-using Ovow.Framework.Scenes;
 using Ovow.Framework.Sounds;
 using Ovow.Framework.Sprites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TypingGame.Scenes
 {
     internal sealed class GameOverScene : SceneBase
     {
         private const string ExitGameHint = "游戏结束，请按【空格】键退出";
-
-        private Texture2D gameOverTexture;
-        private SoundEffect bgmEffect;
         private BackgroundMusic bgm;
-        private SpriteFont font;
+        private SoundEffect bgmEffect;
         private bool disposed = false;
+        private SpriteFont font;
+        private Texture2D gameOverTexture;
 
         public GameOverScene(IOvowGame game)
             : base(game)
         { }
+
+        public override void Enter()
+        {
+            bgm.Play();
+        }
+
+        public override void Leave()
+        {
+            bgm.Stop();
+        }
 
         public override void Load(ContentManager contentManager)
         {
@@ -53,16 +56,6 @@ namespace TypingGame.Scenes
             {
                 End();
             }
-        }
-
-        public override void Enter()
-        {
-            bgm.Play();
-        }
-
-        public override void Leave()
-        {
-            bgm.Stop();
         }
 
         protected override void Dispose(bool disposing)
